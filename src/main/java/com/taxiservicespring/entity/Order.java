@@ -1,8 +1,10 @@
 package com.taxiservicespring.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,15 +17,16 @@ import java.util.List;
  * @author Maryna Lendiel
  */
 @Entity(name = "Order")
+@Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "order")
+@Table(name = "`order`")
 public class Order {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
-    private Long id;
+    private int id;
 
     @Column(name = "start_point", nullable = false)
     private String startPoint;
@@ -41,6 +44,7 @@ public class Order {
     private int numberOfPassengers;
 
     @Column(name = "create_time", nullable = false)
+    @CreationTimestamp
     private Date createTime;
 
     @ManyToOne
@@ -50,7 +54,7 @@ public class Order {
     @ManyToMany(cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE
-    })
+    }, fetch = FetchType.EAGER)
     @JoinTable(name = "order_has_car",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "car_id")

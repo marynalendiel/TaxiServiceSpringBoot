@@ -24,7 +24,7 @@ public class OrderPriceCalculator {
         priceList.put("minivan", 20.0);
     }
 
-    public static double calculate(double distance, boolean isDiscount, String category) {
+    public static double calculate(double distance, int isDiscount, String category) {
         double calc = distance * PRICE;
         double discount = 0;
         // order price depends on selected car category
@@ -33,7 +33,7 @@ public class OrderPriceCalculator {
         }
 
         // if user has discount his order is 10% cheaper
-        if (isDiscount) {
+        if (isDiscount == 1) {
             discount = calc * 10 / 100;
         }
         LOGGER.info(Precision.round(calc - discount, 2));

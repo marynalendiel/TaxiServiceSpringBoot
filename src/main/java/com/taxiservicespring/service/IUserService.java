@@ -1,7 +1,8 @@
 package com.taxiservicespring.service;
 
-import org.springframework.stereotype.Service;
+import com.taxiservicespring.entity.User;
 
-@Service
 public interface IUserService {
+    User getUserByLogin(String login);
+    User saveUser(User user);
 }

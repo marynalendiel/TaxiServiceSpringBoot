@@ -3,6 +3,7 @@ package com.taxiservicespring.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,9 +23,9 @@ import java.util.List;
         uniqueConstraints = @UniqueConstraint(columnNames = {"login", "phone_number", "email"}))
 public class User {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
-    private Long id;
+    private int id;
 
     @Column(name = "login", nullable = false, unique = true)
     private String login;
@@ -45,15 +46,16 @@ public class User {
     private String phoneNumber;
 
     @Column(name = "role", nullable = false)
-    private boolean role;
+    private int role;
 
     @Column(name = "discount", nullable = false)
-    private boolean discount;
+    private int discount;
 
     @Column(name = "create_time", nullable = false)
+    @CreationTimestamp
     private Date createTime;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private List<Order> orders = new ArrayList<>();
 
     @Override

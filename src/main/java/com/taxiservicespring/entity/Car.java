@@ -1,5 +1,7 @@
 package com.taxiservicespring.entity;
 
+import com.taxiservicespring.entity.enums.Category;
+import com.taxiservicespring.entity.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +22,9 @@ import java.util.*;
         uniqueConstraints = @UniqueConstraint(columnNames = {"car_number"}))
 public class Car {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", insertable = false, updatable = false, nullable = false)
-    private Long id;
+    private int id;
 
     @Column(name = "brand", nullable = false)
     private String brand;
@@ -36,18 +38,11 @@ public class Car {
     @Column(name = "number_of_seats", nullable = false)
     private int numberOfSeats;
 
-    @Column(name = "category", nullable = false)
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
-    @Column(name = "status", nullable = false)
-    private String status;
-
-    @OneToMany(
-            mappedBy = "car",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<CarLanguage> carLangDescriptions = new ArrayList<>();
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @ManyToMany(mappedBy = "cars")
     private List<Order> orders;
@@ -67,12 +62,12 @@ public class Car {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Car car = (Car) o;
-        return numberOfSeats == car.numberOfSeats && Objects.equals(id, car.id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(carNumber, car.carNumber) && Objects.equals(category, car.category) && Objects.equals(status, car.status) && Objects.equals(carLangDescriptions, car.carLangDescriptions) && Objects.equals(orders, car.orders);
+        return numberOfSeats == car.numberOfSeats && Objects.equals(id, car.id) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model) && Objects.equals(carNumber, car.carNumber) && Objects.equals(category, car.category) && Objects.equals(status, car.status) && Objects.equals(orders, car.orders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, brand, model, carNumber, numberOfSeats, category, status, carLangDescriptions, orders);
+        return Objects.hash(id, brand, model, carNumber, numberOfSeats, category, status, orders);
     }
 
     @Override
@@ -84,7 +79,6 @@ public class Car {
                 ", numberOfSeats=" + numberOfSeats +
                 ", category='" + category + '\'' +
                 ", status='" + status + '\'' +
-                ", description='" + carLangDescriptions + '\'' +
                 '}';
     }
 }
